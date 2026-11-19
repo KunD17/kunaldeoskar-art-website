@@ -33,3 +33,8 @@ dist/
 .astro/
 .netlify/
 .mypy_cache/
+
+# Secrets (passwords, API keys) - never commit these
+.env
+.env.*
+!.env.example
