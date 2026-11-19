@@ -27,6 +27,7 @@
   size: 70cm x 100cm x 2 cm             
   series: Seascapes                 
   image: ./images/DSC_7829 edited.webp
+  alt: Tall-masted Dutch sailing ships at anchor on calm green water under billowing white clouds, with a small rowing boat in the foreground.
   description: This work is a mastercopy of the painting,'Dutch Ships in a Calm Sea (1665)' by Willem van de Velde the Younger, one of the great painters of the Dutch Golden Age of marine art. Painted in water mixable oil, it is slightly smaller than the original but keeps its proportions, its stillness, and its luminous sky. Hidden within it is a personal addition. In the little boat ferrying dignitaries toward the fleet, I have replaced two of the rowers with my wife and myself, dressed as we were on our wedding day. We are easy to miss. The painting's attention belongs to the ships, the officials, and the history. I have come to think that most of life is like this. We are rarely the main event, and that isn't the point. What matters is being part of the story and playing our small but beautiful role in the grand scheme of life.
   selected: true
 
@@ -37,6 +38,7 @@
   size: 80 cm x 100 cm x 2 cm
   series: Birds of Paradise
   image: ./images/DSC_7830 edited.webp
+  alt: A woman in an orange sari sits against a plain gold background, one peacock perched behind her and another at her side among dark leaves.
   description: How do we remember anything? The people we meet, the places we’ve been... what do we deem important and choose to highlight? I am intrigued by these questions and explore how we remember people through my portrait practice. We never truly know a person; we only know an idea of them, and we constantly fill the gaps of ignorance with our own assumptions and prejudices. Memory, to me, is an abstract concept, prone to a kind of magical realism that fills in the details we can’t recall. In my series 'Birds of Paradise', I use birds as metaphors for my muses, emphasising their shared characteristics. I paint in water mixable oil on canvas, with a strong focus on composition and colour palette. The abstraction of fabrics and backgrounds in my work reflects how our minds forget secondary traits and then choose to invent them based on our feelings about the subject. This is where the “magic” of memory happens, and where we confront the depths of our own assumptions and emotions. This is how I remember you, how I portray you, and how the story of you will live on in my art. In the painting Kalpavruksha (The Tree of Thought), I portray my memory of a close friend. A pair of peacocks accompanies her, expressing the effortless beauty I associate with these birds of paradise, and with her. The earthy colours, plain gold background and triangular composition reflect how I experience her; grounded, yet regal in the way she carries herself.
   hero: true
   selected: true
@@ -48,6 +50,7 @@
   size: 60 cm x 80 cm x 2 cm                  
   series: Birds of Paradise
   image: ./images/PXL_20260927_101623010 edited.webp
+  alt: A red-haired woman in a yellow sweater and blue jeans stands with folded arms, framed by pink cherry blossom and two blue jays.
   description: This painting is part of my series 'Birds of Paradise', in which birds become metaphors for the people I remember. 'Sakura Sunshine' is my memory of a friend whose sunshine fills every room. She stands crisp and bright in a yellow sweater and blue jeans, as clear and cheerful as a spring morning. Around her, blue jays hop among the cherry blossoms, sharing her playful, quirky spirit.
   selected: true
 
@@ -58,5 +61,6 @@
   size: 50cm x 70cm x 2cm
   series: Birds of Paradise                 
   image: ./images/PXL_20260927_101739968 edited.webp
+  alt: A bearded man in a mustard knitted hat and patterned sweater stands among snowy birch trees, with red cardinals flying around him.
   description: This painting is part of my series 'Birds of Paradise', in which birds become metaphors for the people I remember. 'Natural Habitat' is my memory of a friend with a big heart. The snow lies quiet and the birches stand pale and still, but cardinals gather around him like small embers, drawn to the one warm place in the landscape. This painting is a tribute to all the people like him in our lives.
   selected: true
