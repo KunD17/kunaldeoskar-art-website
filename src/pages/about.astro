@@ -1,0 +1,51 @@
+---
+// ABOUT: portrait + bio, statement and CV (text lives in src/data/about.md).
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { Content } from '../data/about.md';
+import { ARTIST_NAME } from '../settings';
+
+// To change the portrait, point this at another file in images/
+import portrait from '../../images/DSC_7789 1 edited.webp';
+---
+<Base title="About" image={portrait}>
+  <h1 class="page-title">About</h1>
+
+  <div class="about">
+    <figure>
+      <Image
+        src={portrait}
+        alt={`${ARTIST_NAME} seated in front of his painting of a woman with peacocks`}
+        widths={[400, 700, 1000]}
+        sizes="(max-width: 800px) 100vw, 40vw"
+      />
+    </figure>
+    <div class="prose">
+      <Content />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: clamp(28px, 5vw, 80px);
+    align-items: start;
+  }
+  figure { margin: 0; position: sticky; top: 24px; }
+  figure img { width: 100%; }
+
+  .prose :global(h2) { margin-top: 0; }
+  .prose :global(h2:not(:first-child)) { margin-top: 2em; }
+  .prose :global(h3) { font-family: var(--sans); font-size: .8rem; font-weight: 600;
+                       text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+                       margin: 1.6em 0 .6em; }
+  .prose :global(ul) { list-style: none; padding: 0; margin: 0; }
+  .prose :global(li) { padding: 4px 0; }
+
+  @media (max-width: 800px) {
+    .about { grid-template-columns: 1fr; }
+    figure { position: static; max-width: 480px; }
+  }
+</style>

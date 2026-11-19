@@ -1,0 +1,106 @@
+---
+// WORKS: every artwork, with dropdown filters for series and year.
+// The filters are built automatically from whatever is in artworks.yaml.
+import Base from '../../layouts/Base.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import { getArtworks } from '../../lib/artworks';
+
+const all = await getArtworks();
+const seriesList = [...new Set(all.map((a) => a.data.series).filter(Boolean))].sort() as string[];
+const years = [...new Set(all.map((a) => a.data.year))].sort((a, b) => b - a);
+---
+<Base title="Works" image={all[0]?.data.image}>
+  <div class="head">
+    <h1 class="page-title">Works</h1>
+
+    <!-- Hidden until the script below runs, so visitors without JavaScript simply see everything -->
+    <form class="filters" id="filters" hidden>
+      {seriesList.length > 1 && (
+        <label>
+          <span class="visually-hidden">Series</span>
+          <select name="series">
+            <option value="">All series</option>
+            {seriesList.map((s) => <option value={s}>{s}</option>)}
+          </select>
+        </label>
+      )}
+      {years.length > 1 && (
+        <label>
+          <span class="visually-hidden">Year</span>
+          <select name="year">
+            <option value="">All years</option>
+            {years.map((y) => <option value={y}>{y}</option>)}
+          </select>
+        </label>
+      )}
+    </form>
+  </div>
+
+  <ul class="grid" id="gallery">
+    {all.map((artwork, i) => <ArtworkCard artwork={artwork} eager={i < 3} />)}
+  </ul>
+  <p class="empty muted" id="empty" hidden>No works match these filters.</p>
+  <p class="visually-hidden" id="status" aria-live="polite"></p>
+</Base>
+
+<style>
+  .head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 0 24px;
+  }
+  .filters { display: flex; gap: 12px; margin-bottom: clamp(20px, 4vw, 40px); }
+  .filters[hidden] { display: none; }
+  select {
+    font: inherit; font-size: .92rem; color: var(--text);
+    background: transparent; border: 1px solid var(--line); border-radius: 2px;
+    padding: 8px 32px 8px 12px; cursor: pointer;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                      linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 17px) 55%, calc(100% - 12px) 55%;
+    background-size: 5px 5px; background-repeat: no-repeat;
+  }
+  select:hover { border-color: var(--muted); }
+  .empty { margin-top: 24px; }
+</style>
+
+<script>
+  // Shows/hides artworks to match the dropdowns, and remembers the choice in the
+  // address bar (e.g. /works/?series=Portraits) so a filtered view can be shared.
+  const form = document.getElementById('filters') as HTMLFormElement | null;
+  const cards = [...document.querySelectorAll<HTMLElement>('#gallery .card')];
+  const empty = document.getElementById('empty')!;
+  const status = document.getElementById('status')!;
+
+  if (form && form.elements.length > 0) {
+    form.hidden = false;
+    const series = form.elements.namedItem('series') as HTMLSelectElement | null;
+    const year = form.elements.namedItem('year') as HTMLSelectElement | null;
+
+    const params = new URLSearchParams(location.search);
+    if (series) series.value = params.get('series') ?? '';
+    if (year) year.value = params.get('year') ?? '';
+
+    const apply = () => {
+      const s = series?.value ?? '';
+      const y = year?.value ?? '';
+      let shown = 0;
+      for (const card of cards) {
+        const match = (!s || card.dataset.series === s) && (!y || card.dataset.year === y);
+        card.hidden = !match;
+        if (match) shown++;
+      }
+      empty.hidden = shown > 0;
+      status.textContent = `${shown} work${shown === 1 ? '' : 's'} shown`;
+
+      const next = new URLSearchParams();
+      if (s) next.set('series', s);
+      if (y) next.set('year', y);
+      const qs = next.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    };
+
+    form.addEventListener('change', apply);
+    apply();
+  }
+</script>

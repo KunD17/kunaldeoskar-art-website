@@ -1,0 +1,99 @@
+---
+// The frame around every page: <head> details, header with menu, and footer.
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { ARTIST_NAME, SITE_DESCRIPTION } from '../settings';
+
+interface Props {
+  title?: string;             // page title shown in the browser tab
+  description?: string;      // for Google and link previews
+  image?: ImageMetadata;      // picture shown when the page is shared
+}
+
+const { title, description = SITE_DESCRIPTION, image } = Astro.props;
+const fullTitle = title ? `${title} — ${ARTIST_NAME}` : ARTIST_NAME;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const shareImage = image
+  ? new URL((await getImage({ src: image, width: 1200, format: 'jpeg' })).src, Astro.site)
+  : undefined;
+
+const nav = [
+  { href: '/works/', label: 'Works' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {shareImage && <meta property="og:image" content={shareImage} />}
+    <meta name="twitter:card" content={shareImage ? 'summary_large_image' : 'summary'} />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="name">{ARTIST_NAME}</a>
+      <nav aria-label="Main">
+        {nav.map((item) => (
+          <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>© {ARTIST_NAME}. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: clamp(18px, 3vw, 32px) var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+  }
+  .name {
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+    text-decoration: none;
+    letter-spacing: .01em;
+  }
+  nav { display: flex; gap: clamp(16px, 3vw, 32px); }
+  nav a { text-decoration: none; font-size: .95rem; color: var(--muted); padding: 4px 0; }
+  nav a:hover, nav a[aria-current='page'] { color: var(--text); }
+  nav a[aria-current='page'] { text-decoration: underline; }
+
+  .site-footer {
+    width: 100%;
+    max-width: var(--max);
+    margin: clamp(56px, 8vw, 96px) auto 0;
+    padding: 24px var(--gutter) 32px;
+    border-top: 1px solid var(--line);
+    font-size: .85rem;
+    color: var(--muted);
+  }
+  .site-footer p { margin: 0; }
+</style>

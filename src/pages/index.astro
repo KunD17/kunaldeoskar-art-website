@@ -1,0 +1,63 @@
+---
+// HOME: one large hero artwork, then the "selected: true" works from artworks.yaml.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ArtworkCard from '../components/ArtworkCard.astro';
+import { getArtworks } from '../lib/artworks';
+
+const all = await getArtworks();
+const hero = all.find((a) => a.data.hero) ?? all[0];
+const selected = all.filter((a) => a.data.selected && a.id !== hero?.id);
+---
+<Base image={hero?.data.image}>
+  {hero && (
+    <section class="hero">
+      <a href={`/works/${hero.id}/`}>
+        <Image
+          src={hero.data.image}
+          alt={hero.data.alt}
+          widths={[800, 1200, 1600, 2000, 2400]}
+          sizes="(max-width: 1400px) 100vw, 1400px"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </a>
+      <p class="hero-caption">
+        <a href={`/works/${hero.id}/`}>{hero.data.title}</a>, <span class="muted">{hero.data.year}</span>
+      </p>
+    </section>
+  )}
+
+  {selected.length > 0 && (
+    <section class="selected" aria-labelledby="selected-heading">
+      <div class="section-head">
+        <h2 id="selected-heading">Selected works</h2>
+        <a href="/works/">View all works →</a>
+      </div>
+      <ul class="grid">
+        {selected.map((artwork) => <ArtworkCard artwork={artwork} />)}
+      </ul>
+    </section>
+  )}
+</Base>
+
+<style>
+  .hero { margin-top: clamp(8px, 2vw, 24px); }
+  .hero img {
+    width: 100%;
+    max-height: 82vh;
+    object-fit: contain;     /* never crop the painting */
+    object-position: center;
+  }
+  .hero-caption { margin-top: 12px; font-size: .92rem; }
+  .hero-caption a { text-decoration: none; }
+
+  .selected { margin-top: clamp(56px, 9vw, 112px); }
+  .section-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 8px 24px; margin-bottom: clamp(20px, 3vw, 36px);
+  }
+  .section-head h2 { margin: 0; }
+  .section-head a { font-size: .95rem; text-decoration: none; color: var(--muted); }
+  .section-head a:hover { color: var(--text); }
+</style>

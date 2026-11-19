@@ -1,0 +1,98 @@
+---
+// ARTWORK DETAIL: Astro builds one of these pages per artwork in artworks.yaml,
+// at /works/<id>/ — e.g. /works/ships-at-anchor/
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { getArtworks, details, type Artwork } from '../../lib/artworks';
+
+export async function getStaticPaths() {
+  const all = await getArtworks();
+  return all.map((artwork, i) => ({
+    params: { id: artwork.id },
+    props: {
+      artwork,
+      prev: all[i - 1] ?? null,
+      next: all[i + 1] ?? null,
+    },
+  }));
+}
+
+interface Props { artwork: Artwork; prev: Artwork | null; next: Artwork | null }
+const { artwork, prev, next } = Astro.props;
+const { title, year, medium, size, series, image, alt, description } = artwork.data;
+---
+<Base title={title} description={`${title}, ${year}. ${details(artwork)}.`} image={image}>
+  <a href="/works/" class="back">← All works</a>
+
+  <article class="detail">
+    <figure>
+      <Image
+        src={image}
+        alt={alt}
+        widths={[600, 900, 1200, 1600, 2000, 2400]}
+        sizes="(max-width: 900px) 100vw, 66vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+
+    <div class="info">
+      <h1>{title}</h1>
+      <dl>
+        <dt>Year</dt><dd>{year}</dd>
+        <dt>Medium</dt><dd>{medium}</dd>
+        <dt>Size</dt><dd>{size}</dd>
+        {series && (<><dt>Series</dt><dd><a href={`/works/?series=${encodeURIComponent(series)}`}>{series}</a></dd></>)}
+      </dl>
+      {description && <p class="description">{description}</p>}
+      <p class="enquire"><a href="/contact/">Enquire about this work</a></p>
+    </div>
+  </article>
+
+  <nav class="pager" aria-label="More works">
+    {prev ? <a href={`/works/${prev.id}/`} rel="prev">← {prev.data.title}</a> : <span />}
+    {next ? <a href={`/works/${next.id}/`} rel="next">{next.data.title} →</a> : <span />}
+  </nav>
+</Base>
+
+<style>
+  .back {
+    display: inline-block; margin: clamp(8px, 2vw, 16px) 0 clamp(16px, 3vw, 28px);
+    font-size: .92rem; text-decoration: none; color: var(--muted);
+  }
+  .back:hover { color: var(--text); }
+
+  .detail {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+    gap: clamp(24px, 4vw, 64px);
+    align-items: start;
+  }
+  figure { margin: 0; }
+  figure img {
+    width: 100%;
+    max-height: calc(100vh - 160px);
+    object-fit: contain;
+    object-position: left top;
+  }
+  .info { position: sticky; top: 24px; }
+  dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; margin: 20px 0; font-size: .95rem; }
+  dt { color: var(--muted); }
+  dd { margin: 0; }
+  .description { max-width: 32rem; }
+  .enquire { font-size: .95rem; }
+
+  .pager {
+    display: flex; justify-content: space-between; gap: 24px;
+    margin-top: clamp(40px, 6vw, 72px); padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: .92rem;
+  }
+  .pager a { text-decoration: none; color: var(--muted); }
+  .pager a:hover { color: var(--text); }
+
+  @media (max-width: 900px) {
+    .detail { grid-template-columns: 1fr; }
+    figure img { max-height: none; object-position: center; }
+    .info { position: static; }
+  }
+</style>

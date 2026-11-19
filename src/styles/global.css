@@ -1,0 +1,66 @@
+/* ── Colours & type: change these few values to restyle the whole site ── */
+:root {
+  --bg: #fbfaf8;
+  --text: #1c1b1a;
+  --muted: #6e6a65;
+  --line: #e4e0da;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1400px;
+}
+
+/* Smooth cross-fade between pages in browsers that support it (no JavaScript needed) */
+@view-transition { navigation: auto; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 var(--sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1; width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--muted); }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+h2 { font-size: clamp(1.3rem, 2.5vw, 1.7rem); }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+.muted { color: var(--muted); }
+.page-title { margin: clamp(24px, 5vw, 56px) 0 clamp(20px, 4vw, 40px); }
+.prose { max-width: 38rem; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ── Gallery grid (Home "Selected works" and Works page) ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: clamp(28px, 4vw, 56px) clamp(20px, 3vw, 40px);
+  align-items: end;           /* captions line up along the bottom of each row */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.card a { text-decoration: none; display: block; }
+.card img { width: 100%; transition: opacity .2s; background: var(--line); }
+.card a:hover img { opacity: .88; }
+.card a:hover { color: inherit; }
+.card .caption { margin-top: 12px; font-size: .92rem; }
+.card .caption strong { font-weight: 500; }
+.card .caption span { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  * { transition: none !important; }
+}

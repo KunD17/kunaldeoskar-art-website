@@ -1,0 +1,35 @@
+# Original high-res artwork lives only on this machine (and your backups)
+original_heavy/
+
+# Heavy / source image formats - never commit these anywhere in the repo
+*.tif
+*.tiff
+*.psd
+*.psb
+*.raw
+# camera RAW formats (Nikon, Canon, Sony, Fuji, Olympus, Panasonic, Pentax, Adobe DNG)
+*.nef
+*.nrw
+*.cr2
+*.cr3
+*.crw
+*.arw
+*.srf
+*.sr2
+*.raf
+*.orf
+*.rw2
+*.pef
+*.dng
+*.heic
+
+# OS / editor junk
+.DS_Store
+*.webp.tmp
+
+# Website build output and downloaded packages (rebuilt automatically)
+node_modules/
+dist/
+.astro/
+.netlify/
+.mypy_cache/
